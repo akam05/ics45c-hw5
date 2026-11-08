@@ -26,19 +26,36 @@ list::Node* from_string(const char *s)
 // deletes all nodes of linked list
 void list::free(Node* head)
 {
-
+    while (head!= nullptr)
+    {
+        Node *next = head->next;
+        delete head;
+        head = next;
 }
 
 // prints linked list to ostream out
 void list::print(std::ostream& out, Node* head)
 {
-
+    Node* temp = head;
+    while (temp != nullptr)
+    {
+        out << temp->data;
+        temp = temp->next;
+    }
 }
 
 // returns an exact duplicate of linked list starting at head
 list::Node* copy(Node* head)
 {
-
+    Node* copy = new Node{nullptr, nullptr};
+    Node* temp = head;
+    while (temp != nullptr)
+    {
+        copy = temp->data;
+        temp = temp->next;
+        copy = copy->next;
+    }
+    return copy;
 }
 
 // similar to strcmp but for lists
