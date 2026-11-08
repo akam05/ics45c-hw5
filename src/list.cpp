@@ -2,7 +2,7 @@
 #include <ostream>
 
 // returns a linked list from a c-string s
-list::Node* from_string(const char *s)
+list::Node* list::from_string(const char *s)
 {
 	Node* head = nullptr;
 	Node* tail = nullptr;
@@ -31,6 +31,7 @@ void list::free(Node* head)
         Node *next = head->next;
         delete head;
         head = next;
+    }
 }
 
 // prints linked list to ostream out
@@ -45,7 +46,7 @@ void list::print(std::ostream& out, Node* head)
 }
 
 // returns an exact duplicate of linked list starting at head
-list::Node* copy(Node* head)
+list::Node* list::copy(Node* head)
 {
     Node* copy = nullptr;
     Node* tail = nullptr;
@@ -96,7 +97,7 @@ int list::compare(Node* lhs, Node* rhs, int n)
     int len = 0;
     while (left != nullptr && right !=nullptr && len < n) {
         if (left->data != right->data)
-            return static_cast<unsigned int>(left->data) - static_cast<unsigned int>(right->data);
+            return static_cast<unsigned char>(left->data) - static_cast<unsigned char>(right->data);
         left = left->next;
         right = right->next;
         len++;
@@ -124,13 +125,13 @@ int list::length(Node* head)
 }
 
 // returns reversed copy of linked list
-list::Node* reverse(Node* head)
+list::Node* list::reverse(Node* head)
 {
     int len = list::length(head);
     Node* result = nullptr;
     Node* tail = nullptr;
     
-    for (len > 0; len--)
+    for (; len > 0; len--)
     {
         Node* p = nth(head, len - 1);
         Node* node = new Node{p->data, nullptr};
@@ -146,7 +147,7 @@ list::Node* reverse(Node* head)
 }
 
 // returns new list containing all nodes of lhs followed by all nodes of rhs
-list::Node* append(Node* lhs, Node* rhs)
+list::Node* list::append(Node* lhs, Node* rhs)
 {
     Node* result = list::copy(lhs);
 
@@ -185,9 +186,24 @@ list::Node* list::find_char(Node* head, char c)
 }
 
 // similar to strstr but for two linked lists
-list::Node* find_list(Node* haystack, Node* needle)
+list::Node* list::find_list(Node* haystack, Node* needle)
 {
-
+    if (needle == nullptr)
+    {
+        return haystack;
+    }
+    
+    Node* temp = haystack;
+    int len = length(needle);
+    while (temp != nullptr) {
+        int result = compare(temp, needle, len);
+        if (result == 0)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return nullptr;
 }
 
 // get the nth node of linked list
