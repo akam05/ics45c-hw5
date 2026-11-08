@@ -69,15 +69,45 @@ list::Node* copy(Node* head)
 }
 
 // similar to strcmp but for lists
-int list::compare(Node* lhs, Node* rhs
+int list::compare(Node* lhs, Node* rhs)
 {
+    Node* left = lhs;
+    Node* right = rhs;
 
+    while (left != nullptr && right !=nullptr) {
+        if (left->data != right->data)
+            return static_cast<unsigned char>(left->data) - static_cast<unsigned char>(right->data);
+        left = left->next;
+        right = right->next;
+    }
+
+    if (left != nullptr)
+        return 1;
+    else if (right != nullptr)
+        return -1;
+    return 0;
 }
 
 // similar to strncmp but for lists
 int list::compare(Node* lhs, Node* rhs, int n)
 {
-
+    Node* left = lhs;
+    Node* right = rhs;
+    int len = 0;
+    while (left != nullptr && right !=nullptr && len < n) {
+        if (left->data != right->data)
+            return static_cast<unsigned int>(left->data) - static_cast<unsigned int>(right->data);
+        left = left->next;
+        right = right->next;
+        len++;
+    }
+    if (len >= n)
+        return 0;
+    if (left != nullptr)
+        return 1;
+    else if (right != nullptr)
+        return -1;
+    return 0;
 }
 
 // counts number of nodes in linked list
@@ -96,13 +126,36 @@ int list::length(Node* head)
 // returns reversed copy of linked list
 list::Node* reverse(Node* head)
 {
-
+    int len = list::length(head);
+    Node* result = nullptr;
+    Node* tail = nullptr;
+    
+    for (len > 0; len--)
+    {
+        Node* p = nth(head, len - 1);
+        Node* node = new Node{p->data, nullptr};
+        if (result == nullptr)
+        {
+            result = node;
+        } else {
+            tail->next = node;
+        }
+        tail = node;
+    }
+    return result;
 }
 
 // returns new list containing all nodes of lhs followed by all nodes of rhs
 list::Node* append(Node* lhs, Node* rhs)
 {
+    Node* result = list::copy(lhs);
 
+    if (result == nullptr)
+        return list::copy(rhs);
+    
+    Node* tail = list::last(result);
+    tail->next = copy(rhs);
+    return result;
 }
 
 // returns index of node in list starting at head
