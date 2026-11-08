@@ -47,13 +47,23 @@ void list::print(std::ostream& out, Node* head)
 // returns an exact duplicate of linked list starting at head
 list::Node* copy(Node* head)
 {
-    Node* copy = new Node{nullptr, nullptr};
-    Node* temp = head;
+    Node* copy = nullptr;
+    Node* tail = nullptr;
+    Node *temp = head;
+
     while (temp != nullptr)
     {
-        copy = temp->data;
+        Node* node = new Node{temp->data, nullptr};
+        if (copy == nullptr)
+        {
+            copy = node;
+        }
+        else 
+        {
+            tail->next = node;
+        }
+        tail = node;
         temp = temp->next;
-        copy = copy->next;
     }
     return copy;
 }
@@ -73,7 +83,14 @@ int list::compare(Node* lhs, Node* rhs, int n)
 // counts number of nodes in linked list
 int list::length(Node* head)
 {
-
+    Node* temp = head;
+    int len = 0;
+    while (temp != nullptr)
+    {
+        len++;
+        temp = temp->next;
+    }
+    return len; 
 }
 
 // returns reversed copy of linked list
@@ -91,13 +108,27 @@ list::Node* append(Node* lhs, Node* rhs)
 // returns index of node in list starting at head
 int list::index(Node* head, Node* node)
 {
-
+    Node* temp = head;
+    int index = 0;
+    while (temp != nullptr && temp != node) {
+        index++;
+        temp = temp->next;
+    }
+    return index; 
 }
 
 // similar to strchr but for a linked list
-list::Node* find_char(Node* head, char c)
+list::Node* list::find_char(Node* head, char c)
 {
-
+    if (c == '\0')
+    {
+        return nullptr;
+    }
+    Node* temp = head;
+    while (temp != nullptr && temp->data != c) {
+        temp = temp->next;
+    }
+    return temp;
 }
 
 // similar to strstr but for two linked lists
@@ -107,15 +138,32 @@ list::Node* find_list(Node* haystack, Node* needle)
 }
 
 // get the nth node of linked list
-list::Node* nth(Node* head, int n
+list::Node* list::nth(Node* head, int n)
 {
-
+    if (n < 0) {
+        return nullptr;
+    }
+    
+    Node* temp = head;
+    int count = 0;
+    while (temp != nullptr && count < n) {
+        count++;
+        temp = temp->next;
+    }
+    return temp;
 }
 
 // get the last node of linked list
-list::Node* last(Node* head)
+list::Node* list::last(Node* head)
 {
+    Node* slow = head;
+    Node* temp = head->next;
 
+    while(temp != nullptr) {
+        slow = temp;
+        temp = temp->next;
+    }
+    return slow;
 }
 
 
