@@ -96,6 +96,22 @@ TEST(ListTests, compare) {
     EXPECT_GT(list::compare(&right_node, &left_node), 0);
 }
 
+TEST(ListTests, CompareN) {
+    Node* test = list::from_string("test");
+    Node* team = list::from_string("team");
+    Node* tester = list::from_string("tester");
+
+    EXPECT_EQ(list::compare(test, team, 2), 0);
+    EXPECT_GT(list::compare(test, team, 3), 0);
+    EXPECT_LT(list::compare(team, test, 3), 0);
+    EXPECT_LT(list::compare(test, tester, 6), 0);
+    EXPECT_GT(list::compare(tester, test, 6), 0);
+
+    list::free(test);
+    list::free(team);
+    list::free(tester);
+}
+
 TEST(ListTests, reverse) {
     Node* head = list::from_string("foo");
     Node* expected = list::from_string("oof");
@@ -121,7 +137,6 @@ TEST(ListTests, append) {
     Node* lhs = list::from_string("foo");
     Node* rhs = list::from_string("oof");
     Node* expected = list::from_string("foooof");
-
     
     Node* result = list::append(lhs, rhs);
     Node* temp = result;
@@ -139,6 +154,10 @@ TEST(ListTests, append) {
     list::free(rhs);
     list::free(expected);
     list::free(result);
+
+    Node* both_empty = list::append(nullptr, nullptr);
+    EXPECT_EQ(both_empty, nullptr);
+    list::free(both_empty);
 }
 
 TEST(ListTests, index) {
@@ -160,6 +179,16 @@ TEST(ListTests, find_char) {
     EXPECT_EQ(list::find_char(&first, '\0'), nullptr);
 }
 
+TEST(ListTests, MissingCharacter) {
+    Node* head = list::from_string("test");
+
+    EXPECT_EQ(list::find_char(head, '3'), nullptr);
+    EXPECT_EQ(list::find_char(nullptr, 'a'), nullptr);
+    EXPECT_EQ(list::length(nullptr), 0);
+
+    list::free(head);
+}
+
 TEST(ListTests, needle) {
     Node third{'c', nullptr};
     Node second{'b', &third};
@@ -176,12 +205,34 @@ TEST(ListTests, needle) {
     EXPECT_EQ(list::find_list(&a, &b), nullptr);
 }
 
+TEST(ListTests, LongerNeedle) {
+    Node* haystack = list::from_string("tester");
+    Node* needle = list::from_string("testers");
+
+    EXPECT_EQ(list::find_list(haystack, needle), nullptr);
+
+    list::free(haystack);
+    list::free(needle);
+
+    haystack = list::from_string("aaab");
+    needle = list::from_string("aab");
+
+    ASSERT_NE(haystack, nullptr);
+    EXPECT_EQ(list::find_list(haystack, needle), haystack->next);
+
+    list::free(haystack);
+    list::free(needle);
+}
+
 TEST(ListTests, nth) {
     Node third{'a', nullptr};
     Node second{'a', &third};
     Node first{'a', &second};
 
     EXPECT_EQ(list::nth(&first,1),&second);
+    EXPECT_EQ(list::nth(&first, 0), &first);
+    EXPECT_EQ(list::nth(&first, 2), &third);
+    EXPECT_EQ(list::nth(&first, 3), nullptr);
 }
 
 TEST(ListTests, last) {
@@ -190,5 +241,58 @@ TEST(ListTests, last) {
     Node first{'a', &second};
 
     EXPECT_EQ(list::last(&first),&third);
+    EXPECT_EQ(list::last(&second), &third);
+    EXPECT_EQ(list::last(&third), &third);
+}
+
+TEST(ListTests, EmptyFromString) {
+    Node* result = list::from_string("");
+
+    EXPECT_EQ(result, nullptr);
+
+    list::free(result);
+}
+
+TEST(ListTests, EmptyCopy) {
+    Node* result = list::copy(nullptr);
+
+    EXPECT_EQ(result, nullptr);
+
+    list::free(result);
+}
+
+TEST(ListTests, EmptyReverse) {
+    Node* result = list::reverse(nullptr);
+
+    EXPECT_EQ(result, nullptr);
+
+    list::free(result);
+}
+
+TEST(ListTests, AppendEmpty) {
+    Node source{'a', nullptr};
+    Node* result = list::append(nullptr, &source);
+
+    ASSERT_NE(result, nullptr);
+    EXPECT_EQ(result->data, 'a');
+    EXPECT_EQ(result->next, nullptr);
+    EXPECT_NE(result, &source);
+
+    EXPECT_EQ(source.data, 'a');
+    EXPECT_EQ(source.next, nullptr);
+
+    list::free(result);
+
+    result = list::append(&source, nullptr);
+
+    ASSERT_NE(result, nullptr);
+    EXPECT_EQ(result->data, 'a');
+    EXPECT_EQ(result->next, nullptr);
+    EXPECT_NE(result, &source);
+
+    EXPECT_EQ(source.data, 'a');
+    EXPECT_EQ(source.next, nullptr);
+
+    list::free(result);
 }
 
