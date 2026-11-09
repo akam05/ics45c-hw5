@@ -43,6 +43,7 @@ TEST(ListTests, copy) {
     
     while(original !=nullptr)
     {
+        ASSERT_NE(duplicate, nullptr);
         EXPECT_NE(original, duplicate);
         EXPECT_EQ(original->data, duplicate->data);
         original = original->next;
@@ -91,6 +92,7 @@ TEST(ListTests, reverse) {
     while(temp!= nullptr)
     {
         EXPECT_EQ(temp->data,wanted->data);
+        ASSERT_NE(temp, nullptr);
         temp=temp->next;
         wanted=wanted->next;
     }
