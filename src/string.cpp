@@ -79,9 +79,9 @@ String String::reverse() const
 
 // returns index into this string for first occurrence of c
 int String::indexOf(char c) const
-{
+{   
     list::Node* res = list::find_char(head, c);
-
+    
     if (res == nullptr)
         return -1;
     return list::index(head,res);
@@ -90,6 +90,8 @@ int String::indexOf(char c) const
 // returns index into this string for first occurrence of s
 int String::indexOf(const String &s) const
 {
+    if (s.head == nullptr)
+        return 0;
     list::Node* res = list::find_list(head, s.head);
     if (res == nullptr)
         return -1;
