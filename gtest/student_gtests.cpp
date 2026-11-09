@@ -87,13 +87,13 @@ TEST(ListTests, compare) {
     EXPECT_EQ(list::compare(&a, &b, 0), 0);
 
     Node x{'x', nullptr};
-    Node lhs{'a', &x};
-
+    Node left_node{'a', &x};
+    
     Node y{'y', nullptr};
-    Node rhs{'a', &y};
-
-    EXPECT_LT(list::compare(&lhs, &rhs), 0);
-    EXPECT_GT(list::compare(&rhs, &lhs), 0);
+    Node right_node{'a', &y};
+    
+    EXPECT_LT(list::compare(&left_node, &right_node), 0);
+    EXPECT_GT(list::compare(&right_node, &left_node), 0);
 }
 
 TEST(ListTests, reverse) {
@@ -105,8 +105,9 @@ TEST(ListTests, reverse) {
     Node* wanted = expected;
     while(wanted!= nullptr)
     {
-        EXPECT_EQ(temp->data,wanted->data);
         ASSERT_NE(temp, nullptr);
+        EXPECT_EQ(temp->data,wanted->data);
+        
         temp=temp->next;
         wanted=wanted->next;
     }
