@@ -80,6 +80,11 @@ TEST(ListTests, compare) {
     EXPECT_EQ(list::compare(lhs, rhs,3), 0);
     list::free(lhs);
     list::free(rhs);
+
+    Node a{'a', nullptr};
+    Node b{'b', nullptr};
+
+    EXPECT_EQ(list::compare(&a, &b, 0), 0);
 }
 
 TEST(ListTests, reverse) {
@@ -96,6 +101,7 @@ TEST(ListTests, reverse) {
         temp=temp->next;
         wanted=wanted->next;
     }
+    EXPECT_EQ(temp, nullptr);
     list::free(head);
     list::free(expected);
     list::free(reverse);
