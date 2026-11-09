@@ -48,7 +48,7 @@ TEST(ListTests, copy) {
         original = original->next;
         duplicate = duplicate->next;
     }
-    EXPECT_EQ(original, nullptr);
+    EXPECT_EQ(duplicate, nullptr);
     
     list::free(head);
     list::free(copy);
@@ -59,17 +59,23 @@ TEST(ListTests, compare) {
     Node* rhs = list::from_string("");
 
     EXPECT_EQ(list::compare(lhs, rhs), 0);
+    list::free(lhs);
+    list::free(rhs);
     
-    Node* lhs = list::from_string("a");
-    Node* rhs = list::from_string("aa");
+    lhs = list::from_string("a");
+    rhs = list::from_string("aa");
     EXPECT_LT(list::compare(lhs, rhs), 0);
-
-    Node* lhs = list::from_string("aa");
-    Node* rhs = list::from_string("a");
+    list::free(lhs);
+    list::free(rhs);
+    
+    lhs = list::from_string("aa");
+    rhs = list::from_string("a");
     EXPECT_GT(list::compare(lhs, rhs), 0);
-
-    Node* lhs = list::from_string("aaaa");
-    Node* rhs = list::from_string("aaaa");
+    list::free(lhs);
+    list::free(rhs);
+    
+    lhs = list::from_string("aaaa");
+    rhs = list::from_string("aaaa");
     EXPECT_EQ(list::compare(lhs, rhs,3), 0);
     list::free(lhs);
     list::free(rhs);
@@ -81,14 +87,16 @@ TEST(ListTests, reverse) {
     Node* reverse = list::reverse(head);
 
     Node* temp = reverse;
+    Node* wanted = expected;
     while(temp!= nullptr)
     {
-        EXPECT_EQ(reverse->data,expected->data);
-        reverse=reverse->next;
-        expected=expected->next;
+        EXPECT_EQ(temp->data,wanted->data);
+        temp=temp->next;
+        wanted=wanted->next;
     }
     list::free(head);
     list::free(expected);
+    list::free(reverse);
 }
 
 TEST(ListTests, append) {
@@ -96,17 +104,23 @@ TEST(ListTests, append) {
     Node* rhs = list::from_string("oof");
     Node* expected = list::from_string("foooof");
 
+    
     Node* result = list::append(lhs, rhs);
     Node* temp = result;
-    while(temp != nullptr)
+    Node* wanted = expected;
+    while (wanted != nullptr)
     {
-        EXPECT_EQ(result->data,expected->data);
-        result=result->next;
-        expected=expected->next;
+        ASSERT_NE(temp, nullptr);
+        EXPECT_EQ(temp->data, wanted->data);
+        temp = temp->next;
+        wanted = wanted->next;
     }
+    EXPECT_EQ(temp, nullptr);
+    
     list::free(lhs);
     list::free(rhs);
     list::free(expected);
+    list::free(result);
 }
 
 TEST(ListTests, index) {
@@ -127,3 +141,4 @@ TEST(ListTests, find_char) {
     EXPECT_EQ(list::find_char(&first, 'c'), &third);
     EXPECT_EQ(list::find_char(&first, '\0'), nullptr);
 }
+
