@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <utility>
+using namespace std;
 
 // constructs this string from a C string, defaults to empty string
 String::String(const char *s) : head(list::from_string(s))
@@ -26,7 +27,7 @@ void String::swap(String &s)
 }
 
 // assignment operator from one string, s, to this string
-String String::&operator=(const String &s)
+String& String::operator=(const String &s)
 {
     if (this != &s)
     {
@@ -37,7 +38,7 @@ String String::&operator=(const String &s)
 }
 
 // assign to this string by moving
-String String::&operator=(String &&s)
+String& String::operator=(String &&s)
 {
     if (this != &s)
     {
@@ -79,13 +80,20 @@ String String::reverse() const
 // returns index into this string for first occurrence of c
 int String::indexOf(char c) const
 {
-    return list::find_char(head, c);
+    list::Node* res = list::find_char(head, c);
+
+    if (res == nullptr)
+        return -1;
+    return list::index(head,res);
 }
 
 // returns index into this string for first occurrence of s
 int String::indexOf(const String &s) const
 {
-    return list::find_list(head, s.head);
+    list::Node* res = list::find_list(head, s.head);
+    if (res == nullptr)
+        return -1;
+    return list::index(head, res); 
 }
 
 // compare this string with another string by equality
@@ -102,19 +110,19 @@ std::strong_ordering String::operator<=>(const String &s) const
 }
 
 // concatenate this and s to form a return string
-String::String operator+(const String &s) const
+String String::operator+(const String &s) const
 {
-    return String(list::append(head, s.head);
+    return String(list::append(head, s.head));
 }
 
 // concatenate s onto the end of this string
-String::String &operator+=(const String &s)
+String& String::operator+=(const String &s)
 {
-    Node* temp = list::copy(s.head);
+    list::Node* temp = list::copy(s.head);
     if (head == nullptr)
         head = temp;
     else
-        list::last(head)-> added;
+        list::last(head)->next = temp;
 
     return *this;
 }
@@ -142,4 +150,21 @@ void String::read(std::istream &in)
 String::~String()
 {
     list::free(head);
+}
+
+// private constructor
+String::String(list::Node* head) : head(head)
+{
+}
+
+ostream& operator<<(ostream& out, const String& s)
+{
+    s.print(out);
+    return out;
+}
+
+istream& operator>>(istream &in, String& s)
+{
+    s.read(in);
+    return in;
 }
