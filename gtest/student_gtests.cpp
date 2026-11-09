@@ -142,3 +142,27 @@ TEST(ListTests, find_char) {
     EXPECT_EQ(list::find_char(&first, '\0'), nullptr);
 }
 
+TEST(ListTests, needle) {
+    Node third{'c', nullptr};
+    Node second{'b', &third};
+    Node first{'a', &second};
+
+    EXPECT_EQ(list::find_list(&first, &second), &second);
+}
+
+TEST(ListTests, nth) {
+    Node third{'a', nullptr};
+    Node second{'a', &third};
+    Node first{'a', &second};
+
+    EXPECT_EQ(list::nth(&first,1),&second);
+}
+
+TEST(ListTests, last) {
+    Node third{'a', nullptr};
+    Node second{'a', &third};
+    Node first{'a', &second};
+
+    EXPECT_EQ(list::last(&first),&third);
+}
+
