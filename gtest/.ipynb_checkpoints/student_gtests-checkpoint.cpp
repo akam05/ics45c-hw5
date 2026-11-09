@@ -85,6 +85,15 @@ TEST(ListTests, compare) {
     Node b{'b', nullptr};
 
     EXPECT_EQ(list::compare(&a, &b, 0), 0);
+
+    Node x{'x', nullptr};
+    Node lhs{'a', &x};
+
+    Node y{'y', nullptr};
+    Node rhs{'a', &y};
+
+    EXPECT_LT(list::compare(&lhs, &rhs), 0);
+    EXPECT_GT(list::compare(&rhs, &lhs), 0);
 }
 
 TEST(ListTests, reverse) {
@@ -156,6 +165,14 @@ TEST(ListTests, needle) {
     Node first{'a', &second};
 
     EXPECT_EQ(list::find_list(&first, &second), &second);
+
+    Node a{'a', nullptr};
+    Node b{'b', nullptr};
+
+    EXPECT_EQ(list::find_list(&a, nullptr), &a);
+    EXPECT_EQ(list::find_list(nullptr, nullptr), nullptr);
+    EXPECT_EQ(list::find_list(nullptr, &a), nullptr);
+    EXPECT_EQ(list::find_list(&a, &b), nullptr);
 }
 
 TEST(ListTests, nth) {
