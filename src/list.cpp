@@ -121,7 +121,7 @@ int list::length(Node* head)
         len++;
         temp = temp->next;
     }
-    return len; wha
+    return len; 
 }
 
 // returns reversed copy of linked list

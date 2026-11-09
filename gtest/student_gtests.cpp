@@ -94,7 +94,7 @@ TEST(ListTests, reverse) {
 
     Node* temp = reverse;
     Node* wanted = expected;
-    while(temp!= nullptr)
+    while(wanted!= nullptr)
     {
         EXPECT_EQ(temp->data,wanted->data);
         ASSERT_NE(temp, nullptr);
